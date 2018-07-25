@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 
 import com.dtalk.dd.DB.DBInterface;
@@ -37,6 +38,7 @@ import de.greenrobot.event.EventBus;
  * todo IMManager reflect or just like  ctx.getSystemService()
  */
 public class IMService extends Service {
+    private static final String IM_SERVICE_CHANNEL_ID = "IM_foreground_service";
 
     /**binder*/
 	private IMServiceBinder binder = new IMServiceBinder();
@@ -77,7 +79,9 @@ public class IMService extends Service {
 		// make the service foreground, so stop "360 yi jian qingli"(a clean
 		// tool) to stop our app
 		// todo eric study wechat's mechanism, use a better solution
-		startForeground((int) System.currentTimeMillis(), new Notification());
+        Notification.Builder notification = new Notification.Builder(this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) notification.setChannelId(IM_SERVICE_CHANNEL_ID);
+		startForeground((int) System.currentTimeMillis(),notification.build());
 	}
 
 	@Override
