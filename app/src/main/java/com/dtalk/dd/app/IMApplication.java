@@ -2,11 +2,14 @@ package com.dtalk.dd.app;
 
 import android.app.Application;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.support.multidex.MultiDex;
 
 import com.dtalk.dd.BuildConfig;
 import com.dtalk.dd.imservice.service.IMService;
+import com.dtalk.dd.notification.NotificationChannels;
 import com.dtalk.dd.utils.ImageLoaderUtil;
 import com.dtalk.dd.utils.Logger;
 import com.dtalk.dd.utils.SandboxUtils;
@@ -38,7 +41,6 @@ public class IMApplication extends Application {
      */
     public static void main(String[] args) {
     }
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -63,6 +65,7 @@ public class IMApplication extends Application {
         // 解压assert里面的文件
         String isUpdateCid = SandboxUtils.getInstance().get(this, "theme_parse");
         initOK();
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) NotificationChannels.init(this);
     }
 
     private ImagePipelineConfig createFrescoConfig() {
